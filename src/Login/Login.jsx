@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   getAuth,
+  GithubAuthProvider,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -13,6 +14,7 @@ const Login = () => {
   const auth = getAuth(app);
 
   const googleProvider = new GoogleAuthProvider();
+  const gitHubProverider = new GithubAuthProvider();
 
   const handleSignIn = () => {
     signInWithPopup(auth, googleProvider)
@@ -36,6 +38,16 @@ const Login = () => {
         // An error happened.
       });
   };
+
+  const handleGithbAuth = () => {
+    signInWithPopup(auth, gitHubProverider)
+      .then((result) => {
+        const loginUser = result.loginUser;
+        console.log(loginUser);
+        setUser(loginUser);
+      })
+      .catch((err) => console.error(err));
+  };
   return (
     <div>
       {users && (
@@ -50,7 +62,10 @@ const Login = () => {
       {users ? (
         <button onClick={handleSignOut}>Sign Out </button>
       ) : (
-        <button onClick={handleSignIn}>Login now </button>
+        <div>
+          <button onClick={handleSignIn}>Login now </button>
+          <button onClick={handleGithbAuth}>GitHub </button>
+        </div>
       )}
     </div>
   );
